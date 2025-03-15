@@ -105,11 +105,11 @@ CREATE TABLE `ordenes` (
   `id_Ordenes` int(11) NOT NULL AUTO_INCREMENT,
   `mesa_id` int(11) NOT NULL,
   `estado` enum('pendiente','completada','cancelada') NOT NULL DEFAULT 'pendiente',
-  `fecha` timestamp NOT NULL DEFAULT current_timestamp(),
+  `fecha` date NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id_Ordenes`),
   KEY `ordenes_ibfk_1` (`mesa_id`),
   CONSTRAINT `ordenes_ibfk_1` FOREIGN KEY (`mesa_id`) REFERENCES `mesas` (`id_Mesa`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,8 +118,29 @@ CREATE TABLE `ordenes` (
 
 LOCK TABLES `ordenes` WRITE;
 /*!40000 ALTER TABLE `ordenes` DISABLE KEYS */;
+INSERT INTO `ordenes` VALUES (1,2,'pendiente','2025-03-15'),(2,1,'','2025-03-15');
 /*!40000 ALTER TABLE `ordenes` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER despues_insert_agregue_fecha
+Before INSERT on ordenes
+for each row
+begin
+	SET new.fecha = date(now());
+end */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `productos_menu`
@@ -176,6 +197,14 @@ LOCK TABLES `usuarios` WRITE;
 INSERT INTO `usuarios` VALUES (1,'Juan Perez','juan.perez@example.com','password123'),(2,'Maria Lopez','maria.lopez@example.com','password123'),(3,'Carlos Sanchez','carlos.sanchez@example.com','password123'),(4,'Ana Gomez','ana.gomez@example.com','password123'),(5,'Luis Martinez','luis.martinez@example.com','password123');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping events for database 'restaurantedb'
+--
+
+--
+-- Dumping routines for database 'restaurantedb'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -186,4 +215,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-15  9:57:56
+-- Dump completed on 2025-03-15 17:32:58
