@@ -194,7 +194,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'Juan Perez','juan.perez@example.com','password123'),(2,'Maria Lopez','maria.lopez@example.com','password123'),(3,'Carlos Sanchez','carlos.sanchez@example.com','password123'),(4,'Ana Gomez','ana.gomez@example.com','password123'),(5,'Luis Martinez','luis.martinez@example.com','password123');
+INSERT INTO `usuarios` VALUES (1,'Juan Perez','juan.perez@example.com','password1234'),(2,'Maria Lopez','maria.lopez@example.com','password123'),(3,'Carlos Sanchez','carlos.sanchez@example.com','password123'),(4,'Ana Gomez','ana.gomez@example.com','password123'),(5,'Luis Martinez','luis.martinez@example.com','password123');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -215,4 +215,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-15 17:32:58
+-- Dump completed on 2025-03-15 19:36:31

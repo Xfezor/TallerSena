@@ -49,7 +49,7 @@ switch ($path[0]) {
 function login($db) {
     $data = json_decode(file_get_contents('php://input'), true);
     $correo = $data['correo'];
-    $contrasena = $data['password'];
+    $contrasena = $data['contrasena'];
 
     $query = "SELECT * FROM usuarios WHERE correo = :correo AND contrasena = :contrasena";
 

@@ -3,10 +3,10 @@
         private $host = 'localhost';
         private $user = 'root';
         private $password = '';
-        private $databse = 'restaurantedb';
+        private $database = 'restaurantedb';
 
         public function getConnection() {
-            $hostDB = "mysql:host=$this->host;dbname=$this->databse.";
+            $hostDB = "mysql:host=$this->host;dbname=$this->database";
 
             try {
                 $connection = new PDO($hostDB, $this->user, $this->password);
