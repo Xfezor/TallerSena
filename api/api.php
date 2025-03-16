@@ -17,27 +17,27 @@ $requestMethod = $_SERVER['REQUEST_METHOD'];
 $path = explode('/', trim($_SERVER['PATH_INFO'], '/'));
 
 switch ($path[0]) {
-    case 'login' :
+    case 'login':
         if ($requestMethod == 'POST') {
             login($db);
         }
         break;
-    case 'mesas' :
+    case 'mesas':
         if ($requestMethod == 'GET') {
             traerMesas($db);
         }
         break;
-    case 'menu' :
+    case 'menu':
         if ($requestMethod == 'GET') {
             traerMenu($db);
         }
         break;
-    case 'order' :
+    case 'order':
         if ($requestMethod == 'POST') {
             crearOrder($db);
-        } else if ($requestMethod = 'PUT'){
+        } else if ($requestMethod == 'PUT') {
             actualizarOrder($db);
-        } else if ($requestMethod = 'DELETE'){
+        } else if ($requestMethod == 'DELETE') {
             eliminarOrder($db);
         }
         break;
@@ -45,6 +45,7 @@ switch ($path[0]) {
         echo json_encode(array('message' => 'Endpoint no encontrado'));
         break;
 }
+
 
 function login($db) {
     $data = json_decode(file_get_contents('php://input'), true);
@@ -88,64 +89,101 @@ function traerMenu($db) {
 
 function crearOrder($db) {
     $data = json_decode(file_get_contents("php://input"), true);
-    $mesa_id = $data['mesa_id'];
-    $productos = $data['productos'];
 
-    $query = "INSERT INTO ordenes (mesa_id, estado) VALUES (:mesa_id, 'pendiente')";
-    $stmt = $db->prepare($query);
-    $stmt->bindParam(':mesa_id', $mesa_id);
-    $stmt->execute();
-    $orden_id = $db->lastInsertId();
+    // Agregar depuración para ver los datos recibidos
+    error_log("Datos recibidos: " . print_r($data, true));
 
-    foreach ($productos as $producto) {
-        $query = "INSERT INTO orden_detalle (orden_id, producto_id, cantidad) VALUES (:orden_id, :producto_id, :cantidad)";
+    if (isset($data['mesa_id']) && isset($data['productos'])) {
+        $mesa_id = $data['mesa_id'];
+        $productos = $data['productos'];
+
+        $query = "INSERT INTO ordenes (mesa_id, estado) VALUES (:mesa_id, 'pendiente')";
         $stmt = $db->prepare($query);
-        $stmt->bindParam(':orden_id', $orden_id);
-        $stmt->bindParam(':producto_id', $producto['id']);
-        $stmt->bindParam(':cantidad', $producto['cantidad']);
+        $stmt->bindParam(':mesa_id', $mesa_id);
         $stmt->execute();
-    }
+        $id_Orden = $db->lastInsertId();
 
-    echo json_encode(["message" => "Orden creada exitosamente", "orden_id" => $orden_id]);
+        foreach ($productos as $producto) {
+            $query = "INSERT INTO orden_detalle (id_Orden, producto_id, cantidad) VALUES (:id_Orden, :producto_id, :cantidad)";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':id_Orden', $id_Orden);
+            $stmt->bindParam(':producto_id', $producto['id']);
+            $stmt->bindParam(':cantidad', $producto['cantidad']);
+            $stmt->execute();
+        }
+
+        echo json_encode(["message" => "Orden creada exitosamente", "id_Orden" => $id_Orden]);
+    } else {
+        echo json_encode(["message" => "Datos incompletos para crear la orden"]);
+    }
 }
 
 function actualizarOrder($db) {
     $data = json_decode(file_get_contents("php://input"), true);
-    $orden_id = $data['orden_id'];
-    $productos = $data['productos'];
 
-    $query = "DELETE FROM orden_detalle WHERE orden_id = :orden_id";
-    $stmt = $db->prepare($query);
-    $stmt->bindParam(':orden_id', $orden_id);
-    $stmt->execute();
+    if (isset($data['id_Orden']) && isset($data['productos'])) {
+        $id_Orden = $data['id_Orden'];
+        $productos = $data['productos'];
 
-    foreach ($productos as $producto) {
-        $query = "INSERT INTO orden_detalle (orden_id, producto_id, cantidad) VALUES (:orden_id, :producto_id, :cantidad)";
+        // Obtener los productos existentes en la orden
+        $query = "SELECT producto_id FROM orden_detalle WHERE id_Orden = :id_Orden";
         $stmt = $db->prepare($query);
-        $stmt->bindParam(':orden_id', $orden_id);
-        $stmt->bindParam(':producto_id', $producto['id']);
-        $stmt->bindParam(':cantidad', $producto['cantidad']);
+        $stmt->bindParam(':id_Orden', $id_Orden);
         $stmt->execute();
-    }
+        $productos_existentes = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-    echo json_encode(["message" => "Orden actualizada exitosamente", "orden_id" => $orden_id]);
+        // Actualizar o insertar los detalles de la orden
+        foreach ($productos as $producto) {
+            if (in_array($producto['id'], $productos_existentes)) {
+                // Actualizar el producto existente
+                $query = "UPDATE orden_detalle SET cantidad = :cantidad WHERE id_Orden = :id_Orden AND producto_id = :producto_id";
+                $stmt = $db->prepare($query);
+                $stmt->bindParam(':id_Orden', $id_Orden);
+                $stmt->bindParam(':cantidad', $producto['cantidad']);
+                $stmt->bindParam(':producto_id', $producto['id']);
+                $stmt->execute();
+            } else {
+                // Insertar un nuevo producto
+                $query = "INSERT INTO orden_detalle (id_Orden, producto_id, cantidad) VALUES (:id_Orden, :producto_id, :cantidad)";
+                $stmt = $db->prepare($query);
+                $stmt->bindParam(':id_Orden', $id_Orden);
+                $stmt->bindParam(':producto_id', $producto['id']);
+                $stmt->bindParam(':cantidad', $producto['cantidad']);
+                $stmt->execute();
+            }
+        }
+
+        echo json_encode(["message" => "Orden actualizada exitosamente", "id_Orden" => $id_Orden]);
+    } else {
+        echo json_encode(["message" => "Datos incompletos para actualizar la orden"]);
+    }
 }
 
 function eliminarOrder($db) {
     $data = json_decode(file_get_contents("php://input"), true);
-    $orden_id = $data['orden_id'];
 
-    $query = "DELETE FROM orden_detalle WHERE orden_id = :orden_id";
-    $stmt = $db->prepare($query);
-    $stmt->bindParam(':orden_id', $orden_id);
-    $stmt->execute();
+    // Agregar depuración para ver los datos recibidos
+    error_log("Datos recibidos: " . print_r($data, true));
 
-    $query = "DELETE FROM ordenes WHERE id = :orden_id";
-    $stmt = $db->prepare($query);
-    $stmt->bindParam(':orden_id', $orden_id);
-    $stmt->execute();
+    if (isset($data['id_Orden'])) {
+        $id_Orden = $data['id_Orden'];
 
-    echo json_encode(["message" => "Orden eliminada exitosamente", "orden_id" => $orden_id]);
+        // Eliminar los detalles de la orden
+        $query = "DELETE FROM orden_detalle WHERE id_Orden = :id_Orden";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':id_Orden', $id_Orden);
+        $stmt->execute();
+
+        // Eliminar la orden
+        $query = "DELETE FROM ordenes WHERE id_Ordenes = :id_Orden";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':id_Orden', $id_Orden);
+        $stmt->execute();
+
+        echo json_encode(["message" => "Orden eliminada exitosamente"]);
+    } else {
+        echo json_encode(["message" => "Datos incompletos para eliminar la orden"]);
+    }
 }
 
 ?>

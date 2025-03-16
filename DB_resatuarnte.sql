@@ -80,7 +80,8 @@ CREATE TABLE `orden_detalle` (
   `cantidad` int(11) NOT NULL,
   PRIMARY KEY (`id_Detalle_Orden`),
   KEY `producto_idx_idx` (`producto_id`),
-  CONSTRAINT `orden_idx` FOREIGN KEY (`id_Detalle_Orden`) REFERENCES `ordenes` (`id_Ordenes`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  KEY `id_ordenx_idx` (`id_Orden`),
+  CONSTRAINT `id_ordenx` FOREIGN KEY (`id_Orden`) REFERENCES `ordenes` (`id_Ordenes`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `producto_idx` FOREIGN KEY (`producto_id`) REFERENCES `productos_menu` (`id_Producto`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -109,7 +110,7 @@ CREATE TABLE `ordenes` (
   PRIMARY KEY (`id_Ordenes`),
   KEY `ordenes_ibfk_1` (`mesa_id`),
   CONSTRAINT `ordenes_ibfk_1` FOREIGN KEY (`mesa_id`) REFERENCES `mesas` (`id_Mesa`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,7 +119,7 @@ CREATE TABLE `ordenes` (
 
 LOCK TABLES `ordenes` WRITE;
 /*!40000 ALTER TABLE `ordenes` DISABLE KEYS */;
-INSERT INTO `ordenes` VALUES (1,2,'pendiente','2025-03-15'),(2,1,'','2025-03-15');
+INSERT INTO `ordenes` VALUES (1,2,'pendiente','2025-03-15'),(2,1,'','2025-03-15'),(3,1,'pendiente','2025-03-16'),(4,1,'pendiente','2025-03-16'),(5,1,'pendiente','2025-03-16'),(6,1,'pendiente','2025-03-16'),(7,1,'pendiente','2025-03-16'),(8,1,'pendiente','2025-03-16'),(9,1,'pendiente','2025-03-16'),(10,1,'pendiente','2025-03-16'),(11,1,'pendiente','2025-03-16'),(12,1,'pendiente','2025-03-16'),(13,1,'pendiente','2025-03-16'),(14,1,'pendiente','2025-03-16');
 /*!40000 ALTER TABLE `ordenes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -215,4 +216,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-15 19:36:31
+-- Dump completed on 2025-03-16 14:06:52
