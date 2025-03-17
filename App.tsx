@@ -3,21 +3,12 @@ import { StyleSheet, Text, View, Image, TextInput, Button, ToastAndroid } from '
 import { RoundedButton } from './src/components/RoundedButton';
 import { Mesas } from './src/views/mesas';
 import menu from './src/views/menu';
+import pedido from './src/views/pedido';
 import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
-
-const Menu: React.FC<{ route: any }> = ({ route }) => {
-  const { numero } = route.params;
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Menú de la Mesa {numero}</Text>
-      {/* Aquí puedes agregar los detalles del menú */}
-    </View>
-  );
-};
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -33,6 +24,7 @@ export default function App() {
         <Stack.Navigator>
           <Stack.Screen name="Mesas" component={Mesas} />
           <Stack.Screen name="Menu" component={menu} />
+          <Stack.Screen name="Pedido" component={pedido} />
         </Stack.Navigator>
       </NavigationContainer>
     );
