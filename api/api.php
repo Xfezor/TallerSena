@@ -80,7 +80,7 @@ function traerMesas($db) {
 }
 
 function traerMenu($db) {
-    $query = "SELECT * FROM menu";
+    $query = "SELECT nombre, precio, descripcion FROM productos_menu";
     $stmt = $db->prepare($query);
     $stmt->execute();
     $menu = $stmt->fetchAll(PDO::FETCH_ASSOC);
