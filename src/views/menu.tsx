@@ -2,11 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Plato } from '../components/platos';
 
-const platosData = [
-    { nombre: 'Plato 1', imagen: require('../../assets') },
-    { nombre: 'Plato 2', imagen: require('../../assets') },
-    { nombre: 'Plato 3', imagen: require('../../assets') },
-  ];
+
 interface Manuprops {
     route: any;
 }
@@ -16,7 +12,6 @@ const Menu: React.FC<Manuprops> = ({ route }) => {
     return (
         <View style={styles.container}>
           <Text style={styles.title}>Menú de la Mesa {numero}</Text>
-          {/* Aquí puedes agregar los detalles del menú */}
           <Text style={styles.item}>Plato 1</Text>
           <Text style={styles.item}>Plato 2</Text>
           <Text style={styles.item}>Plato 3</Text>
