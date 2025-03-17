@@ -6,7 +6,7 @@ require './recursos/conexion.php';
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
-header('Acces-COntrol-Allow-Headers: Content-Typea, Acces-Control-Allow-Headers, Authorization, X-Requested-With');
+header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
 
 $database = new DataBase();
 
@@ -14,9 +14,8 @@ $db = $database->getConnection();
 
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
-$path = explode('/', trim($_SERVER['PATH_INFO'], '/'));
-
-switch ($path[0]) {
+$path = isset($_SERVER['PATH_INFO']) ? explode('/', trim($_SERVER['PATH_INFO'], '/')) : [];
+switch ($path[0] ?? '') {
     case 'login':
         if ($requestMethod == 'POST') {
             login($db);

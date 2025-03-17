@@ -1,22 +1,44 @@
-import React from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
 import { Mesa } from '../components/Mesas';
 import { useNavigation } from '@react-navigation/native';
 
+interface MesaData {
+  id_Mesa: number;
+  numero: number;
+  ocupada: boolean;
+}
+
 export const Mesas: React.FC = () => {
+  const [mesas, setMesas] = useState<MesaData[]>([]);
+  const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const fetchMesas = async () => {
+      try {
+        const response = await fetch('http://localhost/TallerSena/api/api.php');
+        const data = await response.json();
+        setMesas(data);
+      } catch (error) {
+        console.error('Error fetching mesas:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMesas();
+  }, []);
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Mesa numero={1} ocupada={false} navigation={navigation} />
-      <Mesa numero={2} ocupada={true} navigation={navigation} />
-      <Mesa numero={3} ocupada={false} navigation={navigation} />
-      <Mesa numero={4} ocupada={true} navigation={navigation} />
-      <Mesa numero={5} ocupada={false} navigation={navigation} />
-      <Mesa numero={6} ocupada={false} navigation={navigation} />
-      <Mesa numero={7} ocupada={true} navigation={navigation} />
-      <Mesa numero={8} ocupada={false} navigation={navigation} />
-      <Mesa numero={9} ocupada={true} navigation={navigation} />
-      <Mesa numero={10} ocupada={false} navigation={navigation} />
+      {mesas.map((mesa) => (
+        <Mesa key={mesa.id_Mesa} numero={mesa.numero} ocupada={mesa.ocupada} navigation={navigation} />
+      ))}
     </ScrollView>
   );
 };

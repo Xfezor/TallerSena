@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 interface MesaProps {
   numero: number;
@@ -15,13 +15,13 @@ export const Mesa: React.FC<MesaProps> = ({ numero, ocupada, navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity onPress={handlePress} style={styles.container}>
       <Image
         source={ocupada ? require('../../assets/mesa_ocupada.png') : require('../../assets/mesa_disponible.png')}
         style={styles.image}
       />
-      <Text style={styles.text} onPress={handlePress}>Mesa {numero}</Text>
-    </View>
+      <Text style={styles.text}>Mesa {numero}</Text>
+    </TouchableOpacity>
   );
 };
 
