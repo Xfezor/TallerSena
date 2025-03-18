@@ -1,23 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Button, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 interface PedidoProps {
     route: any;
 }
 
 const Pedido: React.FC<PedidoProps> = ({ route }) => {
-    const { order } = route.params;
+    const { order: initialOrder } = route.params;
+    const [order, setOrder] = useState(initialOrder);
+    const [confirmed, setConfirmed] = useState(false);
+    const navigation = useNavigation();
 
-    const total = order.reduce((sum, product) => sum + product.precio, 0);
+    const total = order.reduce((sum, product) => sum + product.precio * product.cantidad, 0);
 
     const confirmOrder = () => {
+        setConfirmed(true);
         Alert.alert('Orden Confirmada', 'Su orden ha sido confirmada.');
+    };
+
+    const removeFromOrder = (product: any) => {
+        const existingProduct = order.find(item => item.id === product.id);
+        if (existingProduct && existingProduct.cantidad > 1) {
+            setOrder(order.map(item => 
+                item.id === product.id ? { ...item, cantidad: item.cantidad - 1 } : item
+            ));
+        } else {
+            setOrder(order.filter(item => item.id !== product.id));
+        }
     };
 
     const renderItem = ({ item }: { item: any }) => (
         <View style={styles.productContainer}>
             <Text style={styles.productName}>{item.nombre}</Text>
-            <Text style={styles.productPrice}>${item.precio.toFixed(2)}</Text>
+            <Text style={styles.productPrice}>${item.precio.toFixed(2)} x {item.cantidad}</Text>
+            {!confirmed && <Button title="Eliminar" onPress={() => removeFromOrder(item)} />}
         </View>
     );
 
@@ -30,7 +47,14 @@ const Pedido: React.FC<PedidoProps> = ({ route }) => {
                 keyExtractor={item => item.id.toString()}
             />
             <Text style={styles.total}>Total: ${total.toFixed(2)}</Text>
-            <Button title="Confirmar Orden" onPress={confirmOrder} />
+            {!confirmed ? (
+                <Button title="Confirmar Orden" onPress={confirmOrder} />
+            ) : (
+                <Button title="Editar Orden" onPress={() => {
+                    navigation.navigate('Menu', { order, setOrder });
+                    setConfirmed(false);
+                }} />
+            )}
         </View>
     );
 };
