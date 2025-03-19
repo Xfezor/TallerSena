@@ -62,7 +62,7 @@ CREATE TABLE `mesas` (
 
 LOCK TABLES `mesas` WRITE;
 /*!40000 ALTER TABLE `mesas` DISABLE KEYS */;
-INSERT INTO `mesas` VALUES (1,1,0),(2,2,1),(3,3,0),(4,4,1),(5,5,0),(6,6,1),(7,7,0),(8,8,1),(9,9,0),(10,10,1);
+INSERT INTO `mesas` VALUES (1,1,1),(2,2,1),(3,3,0),(4,4,1),(5,5,0),(6,6,1),(7,7,0),(8,8,1),(9,9,0),(10,10,1);
 /*!40000 ALTER TABLE `mesas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -83,7 +83,7 @@ CREATE TABLE `orden_detalle` (
   KEY `id_ordenx_idx` (`id_Orden`),
   CONSTRAINT `id_ordenx` FOREIGN KEY (`id_Orden`) REFERENCES `ordenes` (`id_Ordenes`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `producto_idx` FOREIGN KEY (`producto_id`) REFERENCES `productos_menu` (`id_Producto`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -92,6 +92,7 @@ CREATE TABLE `orden_detalle` (
 
 LOCK TABLES `orden_detalle` WRITE;
 /*!40000 ALTER TABLE `orden_detalle` DISABLE KEYS */;
+INSERT INTO `orden_detalle` VALUES (1,15,1,2),(2,15,2,1),(3,16,1,2),(4,16,2,1),(5,19,1,2),(6,19,2,1),(7,20,1,3),(8,20,2,1),(9,21,1,5),(10,21,2,1),(11,22,1,2),(12,22,2,1),(15,2,1,3),(16,2,2,3),(17,23,1,2),(18,23,2,1),(21,2,4,4),(22,2,5,2),(24,6,1,4),(25,6,2,2),(26,6,3,3);
 /*!40000 ALTER TABLE `orden_detalle` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -110,7 +111,7 @@ CREATE TABLE `ordenes` (
   PRIMARY KEY (`id_Ordenes`),
   KEY `ordenes_ibfk_1` (`mesa_id`),
   CONSTRAINT `ordenes_ibfk_1` FOREIGN KEY (`mesa_id`) REFERENCES `mesas` (`id_Mesa`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -119,7 +120,7 @@ CREATE TABLE `ordenes` (
 
 LOCK TABLES `ordenes` WRITE;
 /*!40000 ALTER TABLE `ordenes` DISABLE KEYS */;
-INSERT INTO `ordenes` VALUES (1,2,'pendiente','2025-03-15'),(2,1,'','2025-03-15'),(3,1,'pendiente','2025-03-16'),(4,1,'pendiente','2025-03-16'),(5,1,'pendiente','2025-03-16'),(6,1,'pendiente','2025-03-16'),(7,1,'pendiente','2025-03-16'),(8,1,'pendiente','2025-03-16'),(9,1,'pendiente','2025-03-16'),(10,1,'pendiente','2025-03-16'),(11,1,'pendiente','2025-03-16'),(12,1,'pendiente','2025-03-16'),(13,1,'pendiente','2025-03-16'),(14,1,'pendiente','2025-03-16');
+INSERT INTO `ordenes` VALUES (2,1,'','2025-03-15'),(3,1,'pendiente','2025-03-16'),(4,1,'pendiente','2025-03-16'),(5,1,'pendiente','2025-03-16'),(6,1,'pendiente','2025-03-16'),(7,1,'pendiente','2025-03-16'),(8,1,'pendiente','2025-03-16'),(9,1,'pendiente','2025-03-16'),(10,1,'pendiente','2025-03-16'),(11,1,'pendiente','2025-03-16'),(12,1,'pendiente','2025-03-16'),(13,1,'pendiente','2025-03-16'),(14,1,'pendiente','2025-03-16'),(15,1,'pendiente','2025-03-16'),(16,1,'pendiente','2025-03-16'),(17,1,'pendiente','2025-03-16'),(18,1,'pendiente','2025-03-16'),(19,1,'pendiente','2025-03-16'),(20,1,'pendiente','2025-03-16'),(21,1,'pendiente','2025-03-16'),(22,2,'pendiente','2025-03-16'),(23,1,'pendiente','2025-03-16');
 /*!40000 ALTER TABLE `ordenes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -216,4 +217,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-16 14:06:52
+-- Dump completed on 2025-03-17  7:03:55

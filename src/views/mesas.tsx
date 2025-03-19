@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, ScrollView, StyleSheet, ActivityIndicator, Button } from 'react-native';
 import { Mesa } from '../components/Mesas';
 import { useNavigation } from '@react-navigation/native';
 
@@ -22,7 +22,11 @@ const mesasData: MesaData[] = [
   { id_Mesa: 10, numero: 10, ocupada: true },
 ];
 
-export const Mesas: React.FC = () => {
+interface MesasProps {
+  handleLogout: () => void;
+}
+
+export const Mesas: React.FC<MesasProps> = ({handleLogout}) => {
   const [mesas, setMesas] = useState<MesaData[]>(mesasData);
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
@@ -32,19 +36,33 @@ export const Mesas: React.FC = () => {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {mesas.map((mesa) => (
-        <Mesa key={mesa.id_Mesa} numero={mesa.numero} ocupada={mesa.ocupada} navigation={navigation} />
-      ))}
-    </ScrollView>
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.mesasContainer}>
+        {mesas.map((mesa) => (
+          <Mesa key={mesa.id_Mesa} numero={mesa.numero} ocupada={mesa.ocupada} navigation={navigation} />
+        ))}
+      </ScrollView>
+      <View style={styles.salircerrarsesion}>
+        <Button title="Salir" onPress={handleLogout} />
+      </View>
+    </View>
   );
 };
 
+
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  mesasContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
     padding: 20,
+  },
+  salircerrarsesion: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
   },
 });
